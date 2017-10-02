@@ -15,12 +15,17 @@ class BATTLETANKS_002_API ATankPlayerController : public APlayerController
 	GENERATED_BODY()
 	
 public: 
-	ATank* GetControlledTank() const; 
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 
-	void BeginPlay() override; 
+	// Called every frame
+	virtual void Tick(float DeltaSeconds) override;
 
+	ATank* GetControlledTank() const;
 
-private: 
+	void AimTowardsCrosshair(); 
 
+private:
 
+	ATank* ControlledTank; 
 };

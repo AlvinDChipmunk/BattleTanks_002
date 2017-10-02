@@ -8,11 +8,8 @@ void ATankAIController::BeginPlay()
 	Super::BeginPlay();
 
 	auto AIControlledTank = GetAIControlledTank();
+
 	auto PlayerTargetTank = GetPlayerTank(); 
-
-
-
-
 
 }
 
