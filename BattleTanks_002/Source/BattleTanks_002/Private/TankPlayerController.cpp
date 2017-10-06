@@ -33,6 +33,19 @@ ATank* ATankPlayerController::GetControlledTank() const
 
 bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) const // returns true if this hits landscape 
 {
+	//outline of process
+	/*
+	find the crosshair position in pixel co ordinates 
+	de project the screen position of the crosshair to a world direction
+	line trace along that direction and see what we hit up to a maximum range 
+	*/
+
+	int32 ViewportSizeX, ViewportSizeY; // current dimensions of the viewport being used by game 
+	GetViewportSize(ViewportSizeX, ViewportSizeY); 
+
+	auto ScreenLocation = FVector2D(ViewportSizeX * CrossHairXLocation, ViewportSizeY * CrossHairYLocation); 
+	//UE_LOG(LogTemp, Warning, TEXT("ScreenLocation: %s"), *(ScreenLocation.ToString())); //this takes care of - find the crosshair position in pixel co ordinates 
+
 	OutHitLocation = FVector(1); // basic unit vector in Unreal 
 	return false; 
 }
@@ -57,19 +70,17 @@ void ATankPlayerController::AimTowardsCrosshair()
 		*/
 
 		//UE_LOG(LogTemp, Warning, TEXT("AimTowardsCrosshair method of TankPlayerController.cpp is active."));
-		//UE_LOG(LogTemp, Warning, TEXT(*HitLocation.ToString()));
-		//UE_LOG(LogTemp, Warning, TEXT("Firing at %s with velocity of %f"), *(AimDirection.ToString()), ProjectileSpeed);
 
 		FVector HitLocation; // OUT Parameter 
 
 		if (GetSightRayHitLocation(HitLocation)) // has side effect; is going to ray trace 
 		{ 
-			UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *(HitLocation.ToString()));
+			//UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *(HitLocation.ToString()));
 
 		}
 		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("No valid aim point.")); 
+			//UE_LOG(LogTemp, Warning, TEXT("No valid aim point.")); 
 		}
 
 	}
