@@ -31,6 +31,12 @@ ATank* ATankPlayerController::GetControlledTank() const
 
 }
 
+bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) const // returns true if this hits landscape 
+{
+	OutHitLocation = FVector(1); // basic unit vector in Unreal 
+	return false; 
+}
+
 void ATankPlayerController::AimTowardsCrosshair()
 {
 	/*
@@ -50,9 +56,24 @@ void ATankPlayerController::AimTowardsCrosshair()
 		then tell the controlled tank to aim at this point
 		*/
 
-		UE_LOG(LogTemp, Warning, TEXT("AimTowardsCrosshair method of TankPlayerController.cpp is active."));
+		//UE_LOG(LogTemp, Warning, TEXT("AimTowardsCrosshair method of TankPlayerController.cpp is active."));
+		//UE_LOG(LogTemp, Warning, TEXT(*HitLocation.ToString()));
+		//UE_LOG(LogTemp, Warning, TEXT("Firing at %s with velocity of %f"), *(AimDirection.ToString()), ProjectileSpeed);
+
+		FVector HitLocation; // OUT Parameter 
+
+		if (GetSightRayHitLocation(HitLocation)) // has side effect; is going to ray trace 
+		{ 
+			UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *(HitLocation.ToString()));
+
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("No valid aim point.")); 
+		}
+
 	}
 
-
-
 } 
+
+

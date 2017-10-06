@@ -26,6 +26,10 @@ public:
 	void AimTowardsCrosshair(); 
 
 private:
-
 	ATank* ControlledTank; 
+
+	//helper method 
+	// return an OUT parameter, true is hit landscape 
+	bool GetSightRayHitLocation(FVector& OutHitLocation) const; 
+
 };
