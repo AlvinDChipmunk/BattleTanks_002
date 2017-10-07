@@ -34,11 +34,10 @@ ATank* ATankPlayerController::GetControlledTank() const
 bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) const // returns true if this hits landscape 
 {
 	//outline of process
-	/*
-	find the crosshair position in pixel co ordinates 
-	de project the screen position of the crosshair to a world direction
-	line trace along that direction and see what we hit up to a maximum range 
-	*/
+
+	//find the crosshair position in pixel co ordinates 
+	//de project the screen position of the crosshair to a world direction
+	//line trace along that direction and see what we hit up to a maximum range 
 
 	int32 ViewportSizeX, ViewportSizeY; // current dimensions of the viewport being used by game 
 	GetViewportSize(ViewportSizeX, ViewportSizeY); 
@@ -46,16 +45,23 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) cons
 	auto ScreenLocation = FVector2D(ViewportSizeX * CrossHairXLocation, ViewportSizeY * CrossHairYLocation); 
 	//UE_LOG(LogTemp, Warning, TEXT("ScreenLocation: %s"), *(ScreenLocation.ToString())); //this takes care of - find the crosshair position in pixel co ordinates 
 
+	FVector LookDirection; 
+
+	if (GetLookDirection(ScreenLocation, LookDirection)) { UE_LOG(LogTemp, Warning, TEXT("Look Direction: %s"), *(LookDirection.ToString())); } 
+
 	OutHitLocation = FVector(1); // basic unit vector in Unreal 
 	return false; 
 }
 
+bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const
+{
+	FVector CameraWorldLocation; //to be discarded 
+	return DeprojectScreenPositionToWorld ( ScreenLocation.X, ScreenLocation.Y, CameraWorldLocation, LookDirection ); 
+}
+
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	/*
-	Start moving the cannon barrel, so that it lines up with the trajectory of 
-	the shot that lands where the crosshairs are aiming.  
-	*/ 
+	//Start moving the cannon barrel, so that it lines up with the trajectory of the shot that lands where the crosshairs are aiming.  
 
 	//safety exit, in case we DO NOT have a player controlled tank 
 
