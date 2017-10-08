@@ -58,12 +58,13 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVec
 	if ( GetWorld()->LineTraceSingleByChannel ( HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility ) )
 	{ 
 		HitLocation = HitResult.Location; 
-		UE_LOG(LogTemp, Warning, TEXT("HitLocation: %s"), *(HitLocation.ToString())); 
-		return true;
+		UE_LOG(LogTemp, Warning, TEXT("TankPlayerController - HitLocation: %s"), *(HitLocation.ToString())); 
+		return true; 
 	} 
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Could NOT get HitLocation.  Possible out of range target status."));
+		HitLocation = FVector::ZeroVector; 
+		UE_LOG(LogTemp, Warning, TEXT("TankPlayerController - Could NOT get HitLocation.  Possible out of range target status."));
 		return false; 
 	}
 	
@@ -87,16 +88,16 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) cons
 		//UE_LOG(LogTemp, Warning, TEXT("Look Direction: %s"), *(LookDirection.ToString())); 
 		if (GetLookVectorHitLocation(LookDirection, OutHitLocation))
 		{
-
+			UE_LOG(LogTemp, Log, TEXT("TankPlayerController.cpp - Valid Hit Location."));
 		} 
 		else
 		{
-
+			UE_LOG(LogTemp, Error, TEXT("TankPlayerController.cpp - Bad Hit Location."));
 		}
 	} 
 
-	OutHitLocation = FVector(1); // basic unit vector in Unreal 
-	return false; 
+	//OutHitLocation = FVector(1); // basic unit vector in Unreal 
+	return true; 
 }
 
 void ATankPlayerController::AimTowardsCrosshair()
@@ -121,7 +122,9 @@ void ATankPlayerController::AimTowardsCrosshair()
 
 		if (GetSightRayHitLocation(HitLocation)) // has side effect; is going to ray trace 
 		{ 
-			//UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *(HitLocation.ToString()));
+			//UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *(HitLocation.ToString())); 
+
+			GetControlledTank()->AimAt(HitLocation); 
 
 		}
 		else

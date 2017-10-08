@@ -33,3 +33,18 @@ void ATank::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 
 }
 
+void ATank::AimAt(FVector HitLocation)
+{
+	auto OurTankName = GetName(); 
+
+	if (!(HitLocation.IsZero()))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Tank.cpp - %s aiming at: %s"), *OurTankName, *(HitLocation.ToString()));
+	} 
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Tank.cpp - %s could NOT get HitLocation.  Possible out of range target status."), *OurTankName);
+	}
+	
+}
+
