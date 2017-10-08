@@ -18,8 +18,6 @@ void ATankAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//UE_LOG(LogTemp, Warning, TEXT("Player Controller now ticking...: %f"), DeltaTime);
-	
 	if (GetPlayerTank()) 
 	{
 		// TODO move towards player 
