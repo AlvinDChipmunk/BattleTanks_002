@@ -29,15 +29,18 @@ private:
 	ATank* ControlledTank; 
 
 	//helper method 
-	// return an OUT parameter, true is hit landscape 
-	bool GetSightRayHitLocation(FVector& OutHitLocation) const; 
 	bool GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const; 
+	bool GetLookVectorHitLocation(FVector LookDirection, FVector& HitLocation) const; 
+	bool GetSightRayHitLocation(FVector& OutHitLocation) const;
 
 	UPROPERTY(EditAnywhere)
 		float CrossHairXLocation = 0.5f; 
 
 	UPROPERTY(EditAnywhere)
 		float CrossHairYLocation = 0.3333f;
+
+	UPROPERTY(EditAnywhere)
+		float LineTraceRange = 1000000.0f; // should be 10 km = 10 * 1000 m = 10 * 1000 * 100 cm
 
 
 
