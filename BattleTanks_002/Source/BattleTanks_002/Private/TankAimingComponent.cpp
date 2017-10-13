@@ -1,6 +1,7 @@
 // Copyright notice may not be needed for a demo portfolio game?
 
 #include "BattleTanks_002.h"
+#include "TankBarrelMesh.h"
 #include "TankAimingComponent.h"
 
 
@@ -16,7 +17,7 @@ UTankAimingComponent::UTankAimingComponent()
 }
 
 
-void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent * BarrelToSet)
+void UTankAimingComponent::SetBarrelReference(UTankBarrelMesh * BarrelToSet)
 { 
 	Barrel = BarrelToSet; 
 }
@@ -43,14 +44,14 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 {
 	//UE_LOG(LogTemp, Error, TEXT("TankAimingComponent.cpp - Do I enter MoveBarrelTowards method??"));
 
-	auto BarrelRotator = Barrel->GetForwardVector().Rotation(); 
+	auto BarrelRotator = Barrel->GetComponentRotation();
 	auto AimAsRotator = AimDirection.Rotation(); 
 	auto DeltaRotator = AimAsRotator - BarrelRotator; 
 
 	UE_LOG(LogTemp, Log, TEXT("TankAimingComponent.cpp - Aim Direction Rotation: %s"), *(AimAsRotator.ToString()));
 	UE_LOG(LogTemp, Log, TEXT("TankAimingComponent.cpp - Delta Rotation: %s"), *(DeltaRotator.ToString()));
 
-
+	Barrel->Elevate(2.5f);
 }
 
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
