@@ -16,7 +16,6 @@ void ATankPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//UE_LOG(LogTemp, Warning, TEXT("Player Controller now ticking...: %f"), DeltaTime);
 	AimTowardsCrosshair(); 
 }
 
@@ -66,7 +65,6 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) cons
 	GetViewportSize(ViewportSizeX, ViewportSizeY); 
 
 	auto ScreenLocation = FVector2D(ViewportSizeX * CrossHairXLocation, ViewportSizeY * CrossHairYLocation); 
-	//UE_LOG(LogTemp, Warning, TEXT("ScreenLocation: %s"), *(ScreenLocation.ToString())); //this takes care of - find the crosshair position in pixel co ordinates 
 
 	//de project the screen position of the crosshair to a world direction
 	FVector LookDirection; 
@@ -86,17 +84,10 @@ void ATankPlayerController::AimTowardsCrosshair()
 {
 	//Start moving the cannon barrel, so that it lines up with the trajectory of the shot that lands where the crosshairs are aiming.  
 
-	//safety exit, in case we DO NOT have a player controlled tank 
-
 	if (!ControlledTank) { return; } // our bad tank pointer exit catch 
 	else
 	{
 		// first get the world location through crosshairs, done by a linetrace 
-
-		/*
-		If the trace hits the landscape,
-		then tell the controlled tank to aim at this point
-		*/
 
 		FVector HitLocation; // OUT Parameter 
 

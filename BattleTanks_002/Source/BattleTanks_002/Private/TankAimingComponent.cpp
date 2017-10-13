@@ -39,6 +39,20 @@ void UTankAimingComponent::TickComponent( float DeltaTime, ELevelTick TickType, 
 	// ...
 }
 
+void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
+{
+	//UE_LOG(LogTemp, Error, TEXT("TankAimingComponent.cpp - Do I enter MoveBarrelTowards method??"));
+
+	auto BarrelRotator = Barrel->GetForwardVector().Rotation(); 
+	auto AimAsRotator = AimDirection.Rotation(); 
+	auto DeltaRotator = AimAsRotator - BarrelRotator; 
+
+	UE_LOG(LogTemp, Log, TEXT("TankAimingComponent.cpp - Aim Direction Rotation: %s"), *(AimAsRotator.ToString()));
+	UE_LOG(LogTemp, Log, TEXT("TankAimingComponent.cpp - Delta Rotation: %s"), *(DeltaRotator.ToString()));
+
+
+}
+
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 { 
 	if (!Barrel) { return; } // pop out of method if no barrel to begin with 
@@ -46,36 +60,10 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 	auto OurTankName = GetOwner()->GetName();
 	auto BarrelLocation = Barrel->GetComponentLocation().ToString(); 
 
-	if (!(HitLocation.IsZero()))
-	{
-		/*
-			UE_LOG(LogTemp, Log, TEXT("TankAimingComponent.cpp - %s aiming at: %s"), *OurTankName, *(HitLocation.ToString()));
-			UE_LOG(LogTemp, Log, TEXT("TankAimingComponent.cpp - Tank cannon barrel location: %s"), *BarrelLocation);	
-		*/
-		UE_LOG(LogTemp, Log, TEXT("TankAimingComponent.cpp - Launch Speed: %f"), LaunchSpeed);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("TankAimingComponent.cpp - %s could NOT get HitLocation.  Possible out of range target status."), *(HitLocation.ToString()));
-	}
-
-	/*
-	static bool SuggestProjectileVelocity
-(
-    const UObject * WorldContextObject, // use keyword this 
-    FVector & TossVelocity, //need OUT parameter, calling it FVector OutLaunchVelocity
-    FVector StartLocation, //need FVector StartLocation 
-    FVector EndLocation, //need FVector EndLocation
-    float TossSpeed,
-    bool bHighArc,
-    float CollisionRadius,
-    float OverrideGravityZ,
-    ESuggestProjVelocityTraceOption::Type TraceOption,
-    const FCollisionResponseParams & ResponseParam,
-    const TArray < AActor * > & ActorsToIgnore,
-    bool bDrawDebug
-)
-	*/
+	if (!(HitLocation.IsZero())) 
+	{ UE_LOG(LogTemp, Log, TEXT("TankAimingComponent.cpp - Launch Speed: %f"), LaunchSpeed); }
+	else 
+	{ UE_LOG(LogTemp, Error, TEXT("TankAimingComponent.cpp - %s could NOT get HitLocation.  Possible out of range target status."), *(HitLocation.ToString())); }
 
 	//now about to implement suggestprojectilevelocity
 
@@ -87,29 +75,24 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 	float ShellImpactRadius = 0.0f; 
 	float OverrideGravityFactor = 0.0f;
 
-	if (UGameplayStatics::SuggestProjectileVelocity
-		(
-		    this, 
-			OutLaunchVelocity, 
-			StartLocation, 
-			HitLocation,
-			LaunchSpeed,
-			UseTheHighArc,
-			ShellImpactRadius,
-			OverrideGravityFactor,
-		    ESuggestProjVelocityTraceOption::TraceFullPath
-		)
-	)
-	{
+	bool HaveValidAimSolution = UGameplayStatics::SuggestProjectileVelocity
+	(
+		this,
+		OutLaunchVelocity,
+		StartLocation,
+		HitLocation,
+		LaunchSpeed,
+		ESuggestProjVelocityTraceOption::TraceFullPath
+	); 
 
+	if ( HaveValidAimSolution )
+	{
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
 		UE_LOG(LogTemp, Log, TEXT("TankAimingComponent.cpp - Aiming at: %s"), *(AimDirection.ToString()));
-
+		MoveBarrelTowards(AimDirection); 
 	} 
 	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("TankAimingComponent.cpp - NO VALID aiming point!!"));
-	}
+	{ UE_LOG(LogTemp, Error, TEXT("TankAimingComponent.cpp - NO VALID aiming point!!")); }
 
 
 
