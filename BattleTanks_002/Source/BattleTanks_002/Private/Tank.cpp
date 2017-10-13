@@ -20,6 +20,7 @@ void ATank::BeginPlay()
 {
 	Super::BeginPlay();
 
+	VisibleLaunchSpeed = LaunchSpeed; 
 }
 
 // Called every frame
@@ -33,19 +34,20 @@ void ATank::Tick(float DeltaTime)
 void ATank::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 {
 	Super::SetupPlayerInputComponent(InputComponent);
-
 }
 
-void ATank::AimAt(FVector HitLocation)
+void ATank::AimAt(FVector HitLocation, float LaunchSpeed)
 {
-
-	TankAimingComponent->AimAt(HitLocation); 
-
-
+	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
 }
 
 void ATank::SetBarrelReference(UStaticMeshComponent * BarrelToSet)
 { 
 	TankAimingComponent->SetBarrelReference(BarrelToSet); 
+}
+
+float ATank::GetLaunchSpeed()
+{
+	return LaunchSpeed;
 }
 

@@ -102,7 +102,7 @@ void ATankPlayerController::AimTowardsCrosshair()
 
 		if (GetSightRayHitLocation(HitLocation)) // has side effect; is going to ray trace 
 		{ 
-			GetControlledTank()->AimAt(HitLocation); 
+			GetControlledTank()->AimAt(HitLocation, ControlledTank->GetLaunchSpeed());
 		}
 
 	}

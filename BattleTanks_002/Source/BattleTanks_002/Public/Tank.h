@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include "GameFramework/Pawn.h"
 #include "TankAimingComponent.h"
+#include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
 
 UCLASS()
@@ -24,15 +24,22 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
-	void AimAt(FVector HitLocation); 
+	void AimAt(FVector HitLocation, float LaunchSpeed);
+
+	float GetLaunchSpeed();
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
-		void SetBarrelReference(UStaticMeshComponent* BarrelToSet);
-	
+		void SetBarrelReference(UStaticMeshComponent* BarrelToSet); 
+
 protected: 
-	UTankAimingComponent* TankAimingComponent = nullptr; 
+	UTankAimingComponent* TankAimingComponent; 
 
 
 private: 
+	UPROPERTY(EditAnywhere, Category = Firing)
+		float LaunchSpeed = 10000.0f; // hope this is a sensible starting value, 1000 meters per second 
+
+	float VisibleLaunchSpeed; 
+
 
 };
